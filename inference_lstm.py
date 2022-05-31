@@ -12,7 +12,7 @@ mpPose = mp.solutions.pose
 pose = mpPose.Pose()
 mpDraw = mp.solutions.drawing_utils
 
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("model_tae.h5")
 
 cap = cv2.VideoCapture(0)
 
@@ -60,10 +60,14 @@ def detect(model, lm_list):
     print(lm_list.shape)
     results = model.predict(lm_list)
     print(results)
-    if results[0][0] > 0.5:
-        label = "SWING BODY"
+    if results[0][0] >= 3:
+        label = "DT_3"
+    elif results[0][0] >= 2 and results[0][0] < 3:
+        label = "DT_2"
+    elif results[0][0] < 2 and results[0][0] >= 1:
+        label = "DT_1"
     else:
-        label = "SWING HAND"
+        label = "DT_chao"
     return label
 
 

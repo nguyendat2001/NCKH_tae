@@ -3,7 +3,8 @@ import mediapipe as mp
 import pandas as pd
 
 # Đọc ảnh từ webcam
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture('./data_train/dt_1/dt_tae_1.mp4')
+cap = cv2.VideoCapture('./data_train/dt_chao/dt_chao_1.mp4')
 
 # Khởi tạo thư viện mediapipe
 mpPose = mp.solutions.pose
@@ -11,7 +12,7 @@ pose = mpPose.Pose()
 mpDraw = mp.solutions.drawing_utils
 
 lm_list = []
-label = "BODYSWING"
+label = "dt_chao"
 no_of_frames = 600
 
 def make_landmark_timestep(results):
@@ -41,7 +42,9 @@ while len(lm_list) <= no_of_frames:
     ret, frame = cap.read()
     if ret:
         # Nhận diện pose
+        frame = cv2.resize(frame,(1080,720)) 
         frameRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
         results = pose.process(frameRGB)
 
         if results.pose_landmarks:
