@@ -60,11 +60,11 @@ def detect(model, lm_list):
     print(lm_list.shape)
     results = model.predict(lm_list)
     print(results)
-    if results[0][0] >= 3:
+    if results[0][0] >= 0.75:
         label = "DT_3"
-    elif results[0][0] >= 2 and results[0][0] < 3:
+    elif results[0][0] >= 0.5 and results[0][0] < 0.75:
         label = "DT_2"
-    elif results[0][0] < 2 and results[0][0] >= 1:
+    elif results[0][0] < 0.5 and results[0][0] >= 0.25:
         label = "DT_1"
     else:
         label = "DT_chao"
@@ -88,6 +88,7 @@ while True:
 
             lm_list.append(c_lm)
             if len(lm_list) == n_time_steps:
+                
                 # predict
                 t1 = threading.Thread(target=detect, args=(model, lm_list,))
                 t1.start()

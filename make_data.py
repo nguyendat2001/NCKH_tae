@@ -1,10 +1,10 @@
 import cv2
 import mediapipe as mp
 import pandas as pd
-
+import os
 # Đọc ảnh từ webcam
 # cap = cv2.VideoCapture('./data_train/dt_1/dt_tae_1.mp4')
-cap = cv2.VideoCapture('./data_train/dt_chao/dt_chao_1.mp4')
+cap = cv2.VideoCapture('./data_train/dt_chao/video_tae_1_a.mp4')
 
 # Khởi tạo thư viện mediapipe
 mpPose = mp.solutions.pose
@@ -12,7 +12,7 @@ pose = mpPose.Pose()
 mpDraw = mp.solutions.drawing_utils
 
 lm_list = []
-label = "dt_chao"
+label = "dt_1_a"
 no_of_frames = 600
 
 def make_landmark_timestep(results):
@@ -61,5 +61,6 @@ while len(lm_list) <= no_of_frames:
 # Write vào file csv
 df  = pd.DataFrame(lm_list)
 df.to_csv(label + ".txt")
+# df.to_csv(label + ".txt" , mode='a', header=not os.path.exists(label + ".txt"))
 cap.release()
 cv2.destroyAllWindows()
