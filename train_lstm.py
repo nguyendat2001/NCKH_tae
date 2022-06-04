@@ -14,6 +14,7 @@ dt_chao = pd.read_csv("dt_chao.txt")
 dt_1 = pd.read_csv("dt_1.txt")
 dt_2 = pd.read_csv("dt_2.txt")
 dt_3 = pd.read_csv("dt_3.txt")
+dt_4 = pd.read_csv("dt_4.txt")
 
 X = []
 y = []
@@ -55,6 +56,12 @@ n_sample = len(dataset)
 for i in range(no_of_timesteps, n_sample):
     X.append(dataset[i-no_of_timesteps:i,:])
     y.append(0)
+    
+dataset = dt_4.iloc[:,1:].values
+n_sample = len(dataset)
+for i in range(no_of_timesteps, n_sample):
+    X.append(dataset[i-no_of_timesteps:i,:])
+    y.append(0)
 
 X, y = np.array(X), np.array(y)
 print(X.shape, y.shape)
@@ -70,11 +77,16 @@ model.add(LSTM(units = 50, return_sequences = True))
 model.add(Dropout(0.2))
 model.add(LSTM(units = 50))
 model.add(Dropout(0.2))
-model.add(Dense(4, activation='softmax', name='predictions'))
+model.add(Dense(5, activation='softmax', name='predictions'))
 # model.add(Dense(units = 4, activation="softmax"))
 model.compile(optimizer="adam", metrics = ['accuracy'], loss = 'sparse_categorical_crossentropy')
 
 model.fit(X_train, y_train, epochs=16, batch_size=32,validation_data=(X_test, y_test))
 model.save("model_tae.h5")
+
+loss, acc = model.evaluate(X_test, y_test, verbose=2)
+print("Untrained model, accuracy: {:5.2f}%".format(100 * acc))
+# print(X.shape, y.shape);
+# model.summary()
 
 

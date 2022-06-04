@@ -15,6 +15,7 @@ mpDraw = mp.solutions.drawing_utils
 model = tf.keras.models.load_model("model_tae.h5")
 
 cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture("./data_train/dt_1/tea_1_b.mp4")
 
 def make_landmark_timestep(results):
     c_lm = []
@@ -60,19 +61,33 @@ def detect(model, lm_list):
     print(lm_list.shape)
     results = model.predict(lm_list)
     print(results)
-    if results[0][0] >= 0.75:
-        label = "DT_3"
-    elif results[0][0] >= 0.5 and results[0][0] < 0.75:
-        label = "DT_2"
-    elif results[0][0] < 0.5 and results[0][0] >= 0.25:
-        label = "DT_1"
+    if results[0][0] >= 0.9:
+        label = "10"
+    elif results[0][0] >= 0.8 and results[0][0] < 0.9:
+        label = "9"
+    elif results[0][0] < 0.8 and results[0][0] >= 0.7:
+        label = "8"
+    elif results[0][0] >= 0.6 and results[0][0] < 0.7:
+            label = "7"
+    elif results[0][0] < 0.6 and results[0][0] >= 0.5:
+        label = "6"
+    elif results[0][0] >= 0.4 and results[0][0] < 0.6:
+        label = "5"
+    elif results[0][0] < 0.4 and results[0][0] >= 0.3:
+        label = "4"
+    elif results[0][0] >= 0.2 and results[0][0] < 0.3:
+            label = "3"
+    elif results[0][0] < 0.2 and results[0][0] >= 0.1:
+        label = "2"
     else:
-        label = "DT_chao"
+        label = "1"
     return label
 
 
 i = 0
 warmup_frames = 60
+
+# model.summary()
 
 while True:
 
@@ -88,7 +103,6 @@ while True:
 
             lm_list.append(c_lm)
             if len(lm_list) == n_time_steps:
-                
                 # predict
                 t1 = threading.Thread(target=detect, args=(model, lm_list,))
                 t1.start()
