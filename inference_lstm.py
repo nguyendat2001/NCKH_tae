@@ -5,16 +5,16 @@ import threading
 import tensorflow as tf
 
 label = "Warmup...."
-n_time_steps = 10
+n_time_steps = 20
 lm_list = []
 
 mpPose = mp.solutions.pose
 pose = mpPose.Pose()
 mpDraw = mp.solutions.drawing_utils
 
-model = tf.keras.models.load_model("model_tae.h5")
+model = tf.keras.models.load_model("model_tae_6dt.h5")
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 # cap = cv2.VideoCapture("./data_train/dt_1/tea_1_b.mp4")
 
 def make_landmark_timestep(results):
@@ -31,7 +31,7 @@ def draw_landmark_on_image(mpDraw, results, img):
     mpDraw.draw_landmarks(img, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
     for id, lm in enumerate(results.pose_landmarks.landmark):
         h, w, c = img.shape
-        print(id, lm)
+        # print(id, lm)
         cx, cy = int(lm.x * w), int(lm.y * h)
         cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
     return img
@@ -41,7 +41,7 @@ def draw_class_on_image(label, img):
     font = cv2.FONT_HERSHEY_SIMPLEX
     bottomLeftCornerOfText = (10, 30)
     fontScale = 1
-    fontColor = (0, 255, 0)
+    fontColor = (0, 0, 0)
     thickness = 2
     lineType = 2
     cv2.putText(img, label,
@@ -61,26 +61,33 @@ def detect(model, lm_list):
     print(lm_list.shape)
     results = model.predict(lm_list)
     print(results)
-    if results[0][0] >= 0.9:
-        label = "10"
-    elif results[0][0] >= 0.8 and results[0][0] < 0.9:
-        label = "9"
-    elif results[0][0] < 0.8 and results[0][0] >= 0.7:
-        label = "8"
-    elif results[0][0] >= 0.6 and results[0][0] < 0.7:
-            label = "7"
-    elif results[0][0] < 0.6 and results[0][0] >= 0.5:
-        label = "6"
-    elif results[0][0] >= 0.4 and results[0][0] < 0.6:
-        label = "5"
-    elif results[0][0] < 0.4 and results[0][0] >= 0.3:
-        label = "4"
-    elif results[0][0] >= 0.2 and results[0][0] < 0.3:
-            label = "3"
-    elif results[0][0] < 0.2 and results[0][0] >= 0.1:
-        label = "2"
-    else:
-        label = "1"
+    # if results[0][0] >= 0.9:
+    #     label = "10"
+        
+    # elif results[0][0] >= 1 and results[0][0] < 2:
+    #     label = "a1"
+    # elif results[0][0] < 3 and results[0][0] >= 2:
+    #     label = "a2"
+    # elif results[0][0] >= 3 and results[0][0] < 4:
+    #     label = "a3"
+    # elif results[0][0] >= 0.8 and results[0][0] < 0.9:
+    #     label = "9"
+    # elif results[0][0] < 0.8 and results[0][0] >= 0.7:
+    #     label = "8"
+    # elif results[0][0] >= 0.6 and results[0][0] < 0.7:
+    #         label = "7"
+    # elif results[0][0] < 0.6 and results[0][0] >= 0.5:
+    #     label = "6"
+    # elif results[0][0] >= 0.4 and results[0][0] < 0.6:
+    #     label = "5"
+    # elif results[0][0] < 0.4 and results[0][0] >= 0.3:
+    #     label = "4"
+    # elif results[0][0] >= 0.2 and results[0][0] < 0.3:
+    #         label = "3"
+    # elif results[0][0] < 0.2 and results[0][0] >= 0.1:
+    #     label = "2"
+    # else:
+    #     label = "1"
     return label
 
 
