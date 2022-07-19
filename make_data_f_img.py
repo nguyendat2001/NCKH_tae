@@ -15,7 +15,7 @@ from keras.models import Sequential
 
 # Đọc ảnh từ webcam
 # cap = cv2.VideoCapture('./data_train/dt_1/dt_tae_1.mp4')
-cap = cv2.VideoCapture('./data_train/dt_chao/dt_chao_1.mp4')
+
 
 # Khởi tạo thư viện mediapipe
 mpPose = mp.solutions.pose

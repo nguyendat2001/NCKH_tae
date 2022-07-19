@@ -8,8 +8,8 @@ from sklearn.model_selection import train_test_split
 
 # Đọc dữ liệu
 
-dt_1 = pd.read_csv("dt_1.txt")
-dt_6 = pd.read_csv("dt_6.txt")
+dt_1 = pd.read_csv("pose_5b.txt")
+dt_6 = pd.read_csv("pose_6.txt")
 
 X = []
 y = []
@@ -33,7 +33,8 @@ print(X.shape, y.shape)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
 model  = Sequential()
-model.add(LSTM(units = 512, return_sequences = True, input_shape = (X.shape[1], X.shape[2])))
+
+model.add(LSTM(units = 1024, return_sequences = True, input_shape = (X.shape[1], X.shape[2])))
 model.add(Dropout(0.2))
 model.add(LSTM(units = 512, return_sequences = True))
 model.add(Dropout(0.2))
@@ -44,5 +45,6 @@ model.add(Dropout(0.2))
 model.add(Dense(units = 1, activation="sigmoid"))
 model.compile(optimizer="adam", metrics = ['accuracy'], loss = "binary_crossentropy")
 
-model.fit(X_train, y_train, epochs=16, batch_size=32,validation_data=(X_test, y_test))
-model.save("model_test_16.h5")
+
+model.fit(X_train, y_train, epochs=50, batch_size=50,validation_data=(X_test, y_test))
+model.save("model_test_56.h5")
